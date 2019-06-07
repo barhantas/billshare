@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>535235312227-acrv36nfjo4a2t306pq4ubqjkriroar9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.535235312227-acrv36nfjo4a2t306pq4ubqjkriroar9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAgf3xhVvSuApma5EfdQdKrlVVYyF91BMU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>535235312227</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>billshare</string>
+	<key>PROJECT_ID</key>
+	<string>billsharen</string>
+	<key>STORAGE_BUCKET</key>
+	<string>billsharen.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:535235312227:ios:ed18a0e0bd88d2ae</string>
+	<key>DATABASE_URL</key>
+	<string>https://billsharen.firebaseio.com</string>
+</dict>
+</plist>
