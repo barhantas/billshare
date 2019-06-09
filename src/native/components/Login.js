@@ -168,18 +168,7 @@ const mapStateToProps = ({
     userData
   }
 }) => {
-  console.log(
-    verificationCodeSending,
-    verificationCodeVerifying,
-    confirmResult,
-    userData
-  );
-  return {
-    verificationCodeSending,
-    verificationCodeVerifying,
-    confirmResult,
-    userData
-  };
+  verificationCodeSending, verificationCodeVerifying, confirmResult, userData;
 };
 
 const mapDispatchToProps = dispatch => ({

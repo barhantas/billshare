@@ -48,7 +48,6 @@ class Home extends React.Component {
       .onSnapshot(querySnapshot => {
         const data = querySnapshot.docs.map(doc => doc.data());
         this.setState({ messages: data });
-        console.log(data);
       });
   }
 
@@ -238,20 +237,9 @@ const mapStateToProps = ({
     confirmResult,
     userData
   }
-}) => {
-  console.log(
-    verificationCodeSending,
-    verificationCodeVerifying,
-    confirmResult,
-    userData.phoneNumber
-  );
-  return {
-    verificationCodeSending,
-    verificationCodeVerifying,
-    confirmResult,
-    userData
-  };
-};
+}) => ({
+  verificationCodeSending, verificationCodeVerifying, confirmResult, userData
+});
 
 const mapDispatchToProps = dispatch => ({
   verifyVerificationCode: verificationCode =>

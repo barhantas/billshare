@@ -13,7 +13,6 @@ export function sendVerificationCodeLoaded(confirmResult) {
 }
 
 export function verifyVerificationCode(verificationCode) {
-  console.log(verificationCode);
   return {
     type: "VERIFY_VERIFICATION_CODE",
     verificationCode: verificationCode
@@ -21,7 +20,6 @@ export function verifyVerificationCode(verificationCode) {
 }
 
 export function verifyVerificationCodeLoaded(userData) {
-  console.log(userData);
   return {
     type: "VERIFICATION_CODE_VERIFIED",
     userData: userData

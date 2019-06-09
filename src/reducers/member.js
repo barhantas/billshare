@@ -9,14 +9,12 @@ export default function userReducer(
 ) {
   switch (action.type) {
     case "SEND_VERIFICATION_CODE": {
-      console.log(action);
       return {
         ...state,
         verificationCodeSending: true
       };
     }
     case "VERIFICATION_CODE_SENT": {
-      console.log(action);
       return {
         ...state,
         verificationCodeSending: false,

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { ListView } from "react-native";
+import { FlatList, Modal, View, TouchableHighlight, Alert } from "react-native";
 import {
   Container,
   Header,
@@ -12,74 +12,133 @@ import {
   Text
 } from "native-base";
 
-import { loadBills } from "../../actions/bill";
-
-const datas = [
-  "Simon Mignolet",
-  "Nathaniel Clyne",
-  "Dejan Lovren",
-  "Mama Sakho",
-  "Alberto Moreno",
-  "Emre Can",
-  "Joe Allen",
-  "Phil Coutinho"
-];
+import {
+  loadBills,
+  updateBill,
+  deleteBill,
+  subscribeBills
+} from "../../actions/bill";
+import BillListItem from "./BillListItem";
 
 class BillList extends React.Component {
   constructor(props) {
     super(props);
-    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       basic: true,
-      listViewData: datas
+      isModalVisible: false,
+      selectedBill: null
     };
-  }
-  deleteRow(secId, rowId, rowMap) {
-    rowMap[`${secId}${rowId}`].props.closeRow();
-    const newData = [...this.state.listViewData];
-    newData.splice(rowId, 1);
-    this.setState({ listViewData: newData });
   }
 
   componentDidMount() {
     this.props.loadBills();
+    this.unsubscribe = this.props.subscribeBills();
   }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  toggleModalVisible = selectedBill => {
+    this.setState(prevState => ({
+      isModalVisible: !prevState.isModalVisible,
+      selectedBill: selectedBill
+    }));
+  };
+
+  payBill = () => {
+    const { updateBill } = this.props;
+    const { selectedBill } = this.state;
+
+    updateBill(selectedBill.id, {
+      ...selectedBill,
+      status: "PAID",
+      paidBy: "User1"
+    });
+    this.setState(prevState => ({
+      isModalVisible: !prevState.isModalVisible,
+      selectedBill: null
+    }));
+  };
+
   render() {
     const { bills } = this.props;
-    console.log(bills);
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
+    const { isModalVisible, selectedBill } = this.state;
     return (
       <Container>
         <Header />
         <Content>
-          <List
-            leftOpenValue={75}
-            rightOpenValue={-75}
-            dataSource={this.ds.cloneWithRows(bills)}
-            renderRow={data => {
-              return (
-                <ListItem>
-                  <Text> {data.type} --> {data.price} TL --> {data.status} </Text>
-                </ListItem>
-              );
-            }}
-            renderLeftHiddenRow={data => (
-              <Button full onPress={() => alert(data)}>
-                <Icon active name="information-circle" />
-              </Button>
+          <FlatList
+            data={bills}
+            renderItem={({ item }) => (
+              <BillListItem
+                bill={item}
+                onPayPress={() => this.toggleModalVisible(item)}
+              />
             )}
-            renderRightHiddenRow={(data, secId, rowId, rowMap) => (
-              <Button
-                full
-                danger
-                onPress={_ => this.deleteRow(secId, rowId, rowMap)}
-              >
-                <Icon active name="trash" />
-              </Button>
-            )}
+            keyExtractor={(item, index) => index.toString()}
           />
+          <Modal
+            transparent
+            animationType="slide"
+            visible={isModalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+            }}
+          >
+            <View
+              flex
+              center
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "green"
+              }}
+            >
+              <View>
+                {selectedBill && (
+                  <View style={{ flexWrap: "wrap", flexDirection: "row" }}>
+                    <BillListItem bill={selectedBill} payVisible={false} />
+                  </View>
+                )}
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 26,
+                    color: "white"
+                  }}
+                >
+                  Are you sure that you will pay this bill ?
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-around"
+                  }}
+                >
+                  <Button rounded danger onPress={this.toggleModalVisible}>
+                    <Text
+                      style={{
+                        color: "white"
+                      }}
+                    >
+                      Cancel
+                    </Text>
+                  </Button>
+                  <Button rounded success onPress={this.payBill}>
+                    <Text
+                      style={{
+                        color: "white"
+                      }}
+                    >
+                      PAY
+                    </Text>
+                  </Button>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </Content>
       </Container>
     );
@@ -93,7 +152,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  loadBills: () => dispatch(loadBills())
+  loadBills: () => dispatch(loadBills()),
+  subscribeBills: () => dispatch(subscribeBills()),
+  updateBill: (id, payload) => dispatch(updateBill(id, payload)),
+  deleteBill: id => dispatch(deleteBill(id))
 });
 
 export default connect(
